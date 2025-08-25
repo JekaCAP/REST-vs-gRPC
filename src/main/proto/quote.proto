@@ -1,0 +1,62 @@
+syntax = "proto3";
+
+import "google/protobuf/empty.proto";
+
+/*
+ * Пакетная и внешняя конфигурация для Java
+ * -----------------------------------------
+ * java_multiple_files = true : Генерировать каждый message и service в отдельный Java-класс.
+ * java_package = "com.example.quotes.grpc" : Пакет для сгенерированных Java-классов.
+ * java_outer_classname = "QuoteProto" : Имя внешнего контейнера для классов, если multiple_files = false.
+ */
+option java_multiple_files = true;
+option java_package = "com.example.quotes.grpc";
+option java_outer_classname = "QuoteProto";
+
+/*
+ * Сервис gRPC для работы с цитатами
+ * ---------------------------------
+ * Содержит два RPC метода:
+ * 1. AddQuote - добавляет новую цитату и возвращает её обратно.
+ * 2. GetRandomQuote - возвращает случайную цитату из списка; принимает Empty запрос.
+ *
+ * Особенности:
+ * - Строгая типизация сообщений (QuoteRequest и QuoteResponse)
+ * - Поддержка асинхронного и синхронного вызова через сгенерированные Stub-классы
+ * - Основан на HTTP/2 и использует бинарный формат сериализации (Protobuf)
+ */
+service QuoteService {
+  /*
+   * Добавляет новую цитату.
+   * @param QuoteRequest содержит строку text с цитатой
+   * @return QuoteResponse возвращает добавленную цитату
+   */
+  rpc AddQuote (QuoteRequest) returns (QuoteResponse);
+
+  /*
+   * Возвращает случайную цитату.
+   * @param google.protobuf.Empty пустое сообщение
+   * @return QuoteResponse содержит текст случайной цитаты
+   */
+  rpc GetRandomQuote (google.protobuf.Empty) returns (QuoteResponse);
+}
+
+/*
+ * Сообщение запроса для добавления цитаты
+ * ---------------------------------------
+ * Поля:
+ * - string text : текст цитаты
+ */
+message QuoteRequest {
+  string text = 1;
+}
+
+/*
+ * Сообщение ответа для методов сервиса
+ * ------------------------------------
+ * Поля:
+ * - string text : текст цитаты, которая была добавлена или случайно выбрана
+ */
+message QuoteResponse {
+  string text = 1;
+}

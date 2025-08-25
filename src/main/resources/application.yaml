@@ -1,0 +1,9 @@
+server:
+  port: 8080  # порт для REST
+
+grpc:
+  server:
+    port: 9090       # порт для gRPC
+    enableKeepAlive: true
+    keepAliveWithoutCalls: true
+    negotiationType: plaintext  # без TLS для локального теста
